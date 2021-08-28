@@ -7,7 +7,8 @@ const app = express();
 const PORT = 4000;
 const { CONNECTION_STRING, SESSION_SECRET } = process.env;
 const { getUser, register, login, logout } = require('./controllers/authController');
-const { dragonTreasure } = require('./controllers/treasureController');
+const { dragonTreasure, getUserTreasure, addUserTreasure, getAllTreasure } = require('./controllers/treasureController');
+const { usersOnly, adminsOnly } = require('./middleware/authMiddleware');
 
 app.use(express.json());
 
@@ -39,6 +40,9 @@ app.get('/auth/logout', logout);
 
 // DRAGON TREASURE ENDPOINTS
 app.get('/api/treasure/dragon', dragonTreasure);
+app.get('/api/treasure/user', usersOnly, getUserTreasure);
+app.post('/api/treasure/user', usersOnly, addUserTreasure);
+app.get('/api/treasure/all', usersOnly, adminsOnly, getAllTreasure);
 
 
 
